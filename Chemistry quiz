@@ -1,0 +1,291 @@
+<!-- Created by miranda pascual -->
+
+<h1>Quiz on chemistry</h1>
+<div class="quiz-container">
+  <div id="quiz"></div>
+</div>
+<button id="previous">Previous Question</button>
+<button id="next">Next Question</button>
+<button id="submit">Submit Quiz</button>
+<button id="explain">Explanations</button>
+<button id="reset">Reset Quiz</button>
+<div id="results"></div>
+
+<script>
+(function quiz() {
+  const myQuestions = [
+	{
+	  question: "the majority of an atoms mass exists where",
+	  answers: {
+		a: "in the nucleus",
+		b: "in the electron cloud",
+		c: "in the space between the nucleus and the electrons",
+		d: "in the neutrons"
+	  },
+	  correctAnswer: "a"
+	},
+	{
+	  question: "compared to metals, nonmetals are",
+	  answers: {
+		a: "better electrical conductors",
+		b: "more ductile as a solid",
+		c: "more brittle as a solid",
+		d: "better conductors of heat"
+	  },
+	  correctAnswer: "c"
+	},
+	{
+	  question: "Na is the chemical symbol for what",
+	  answers: {
+		a: "nitrogen",
+		b: "neon",
+		c: "selenium",
+		d: "sodium"
+	  },
+	  correctAnswer: "d"
+	},
+	{
+	  question: "which of the following belongs to the alkali metal family",
+	  answers: {
+		a: "calcium",
+		b: "sodium",
+		c: "chlorine",
+		d: "neon"
+	  },
+	  correctAnswer: "b"
+	},
+	{
+	  question: "the nucleus of an atom consists of what",
+	  answers: {
+		a: "electrons and neutrons",
+		b: "electrons and protons",
+		c: "protons and neutrons",
+		d: "all of the above"
+	  },
+	  correctAnswer: "c"
+	},
+	{
+	  question: "the number of moles of solute present in 1kg of a solvent is called its",
+	  answers: {
+		a: "molality",
+		b: "molarity",
+		c: "normality",
+		d: "formality"
+	  },
+	  correctAnswer: "a"
+	},
+
+  ];
+
+  function buildQuiz() {
+	// we'll need a place to store the HTML output
+	const output = [];
+
+	// for each question...
+	myQuestions.forEach((currentQuestion, questionNumber) => {
+	  // we'll want to store the list of answer choices
+	  const answers = [];
+
+	  // and for each available answer...
+	  for (letter in currentQuestion.answers) {
+		// ...add an HTML radio button
+		answers.push(
+		  `<label>
+			 <input type="radio" name="question${questionNumber}" value="${letter}">
+			  ${letter} :
+			  ${currentQuestion.answers[letter]}
+		   </label>`
+		);
+	  }
+
+	  // add this question and its answers to the output
+	  output.push(
+		`<div class="slide">
+		   <div class="question"> ${currentQuestion.question} </div>
+		   <div class="answers"> ${answers.join("")} </div>
+		 </div>`
+	  );
+	});
+
+	// finally combine our output list into one string of HTML and put it on the page
+	quizContainer.innerHTML = output.join("");
+  }
+
+  function showResults() {
+	// gather answer containers from our quiz
+	const answerContainers = quizContainer.querySelectorAll(".answers");
+
+	// keep track of user's answers
+	var numCorrect = 0;
+
+	// for each question...
+	myQuestions.forEach((currentQuestion, questionNumber) => {
+	  // find selected answer
+	  const answerContainer = answerContainers[questionNumber];
+	  const selector = `input[name=question${questionNumber}]:checked`;
+	  const userAnswer = (answerContainer.querySelector(selector) || {}).value;
+
+	  // if answer is correct
+	  if (userAnswer === currentQuestion.correctAnswer) {
+		// add to the number of correct answers
+		numCorrect++;
+		// color the answers green
+		answerContainers[questionNumber].style.color = "lightgreen";
+	  } else {
+		// if answer is wrong or blank
+		// color the answers red
+		answerContainers[questionNumber].style.color = "red";
+	  }
+	});
+
+	// show number of correct answers out of total
+	resultsContainer.innerHTML = `${numCorrect} out of ${myQuestions.length}`;
+}
+
+function explanation(){
+if (window.confirm('click "Ok" for explanations.')) 
+{
+window.location.href='https://drive.google.com/open?id=1JE03WILHRFG0XCjbLXJyCpmiHW1oaJ8r';
+};
+}
+
+  function showSlide(n) {
+	slides[currentSlide].classList.remove("active-slide");
+	slides[n].classList.add("active-slide");
+	currentSlide = n;
+	
+	if (currentSlide === 0) {
+	  previousButton.style.display = "none";
+	} else {
+	  previousButton.style.display = "inline-block";
+	}
+	
+	if (currentSlide === slides.length - 1) {
+	  nextButton.style.display = "none";
+	  submitButton.style.display = "inline-block";
+	} else {
+	  nextButton.style.display = "inline-block";
+	  submitButton.style.display = "none";
+	}
+	if (currentSlide === slides.length - 1) {
+	  resetButton.style.display = "inline-block";
+		explainButton.style.display = "inline-block";
+	} else {
+	  resetButton.style.display = "none";
+		explainButton.style.display = "none";
+	}
+
+  }
+  function showNextSlide() {
+	showSlide(currentSlide + 1);
+  }
+
+  function showPreviousSlide() {
+	showSlide(currentSlide - 1);
+  }
+
+  const quizContainer = document.getElementById("quiz");
+  const resultsContainer = document.getElementById("results");
+  const submitButton = document.getElementById("submit");
+  const resetButton = document.getElementById("reset");
+  // display quiz right away
+  buildQuiz();
+
+  const previousButton = document.getElementById("previous");
+  const nextButton = document.getElementById("next");
+  const explainButton = document.getElementById("explain");
+  const slides = document.querySelectorAll(".slide");
+  let currentSlide = 0;
+
+  showSlide(0);
+
+  // on submit, show results
+  submitButton.addEventListener("click", showResults);
+  nextButton.addEventListener("click", showNextSlide);
+
+  previousButton.addEventListener("click", showPreviousSlide);
+  explainButton.addEventListener("click", explanation);
+  resetButton.addEventListener("click", resetQuiz);
+  
+  function resetQuiz(){
+	quiz()
+	let n = 0;
+	slides[currentSlide].classList.remove("active-slide");
+	slides[n].classList.add("active-slide");
+	currentSlide = n;
+	resultsContainer.innerHTML = null
+  }
+  
+})();
+</script>
+
+<style>
+@import url(https://fonts.googleapis.com/css?family=Work+Sans:300,600);
+
+body{
+	font-size: 20px;
+	font-family: 'Trebuchet MS', sans-serif;
+	color: #333;
+  font-weight: 300;
+  text-align: center;
+  background-color: lightgray;
+}
+h1{
+  font-weight: 200;
+  margin: 0px;
+  padding: 15px;
+  font-size: 25px;
+  background-color: crimson;
+  color: #fff;
+}
+.question{
+  font-size: 30px;
+  margin-bottom: 10px;
+}
+.answers {
+  margin-bottom: 30px;
+  text-align: left;
+  display: inline-block;
+}
+.answers label{
+  display: block;
+  margin-bottom: 13px;
+}
+button{
+  font-family: 'arial', sans-serif;
+	font-size: 22px;
+	background-color: green;
+	color: #fff;
+	border: 0px;
+	border-radius: 5px;
+	padding: 15px;
+	cursor: pointer;
+	margin-bottom: 50px;
+}
+button:hover{
+	background-color: green;
+}
+
+
+
+
+
+.slide{
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+.active-slide{
+  opacity: 1;
+  z-index: 2;
+}
+.quiz-container{
+  position: relative;
+  height: 200px;
+  margin-top: 40px;
+}
+</style>
