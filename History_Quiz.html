@@ -1,0 +1,328 @@
+<!-- Created by <!—Kenny—> -->
+
+<h1>Quiz on History, WWII</h1>
+<div class="quiz-container">
+  <div id="quiz"></div>
+</div>
+<div id="buttons">
+<button id="previous">Previous Question</button>
+<button id="next">Next Question</button>
+<button id="submit">Submit Quiz</button>
+<button id="explain">Explanations</button>
+<button id="reset">Reset Quiz</button>
+</div>
+<div id="results"></div>
+
+<script>
+(function quiz() {
+{
+	  question: "Who were the Allied powers and their corresponding leaders?",
+	  answers: {
+		a: "Italy, Germany, and Japan. Benito Mussolini, Adolf Hitler, and Emperor Hirohito.",
+		b: "United States, Great Britain, France, and Russia. Franklin D. Roosevelt, Winston Churchill, Édouard Daladier and Joseph Dubendorfer.",
+		c: "United States, Great Britain, France, and Russia. Franklin D. Roosevelt, Winston Churchill,Édouard Daladier and Joseph Stalin."
+
+	  },
+	  correctAnswer: "c"
+	},
+	{
+	  question: "What book did Hitler write while in prison that brought him popularity and described his ideals?",
+	  answers: {
+		a: "Mein Kampf",
+		b: "Deutschlands Kampf",
+		c: "Zweites Buch",
+		d: "My Struggle"
+		
+	  },
+	  correctAnswer: "a"
+	},
+	{
+	  question: "Where did the D-Day Invasion take place?",
+	  answers: {
+		a: "Sicily, Italy",
+		b: "Coasts of England",
+		c: "Dunkirk, France",
+		d: "Normandy, France"
+	  },
+	  correctAnswer: "d"
+	},
+	{
+	  question: "What was the military strategy that the Germans used?",
+	  answers: {
+		a: "Panzer Tactics",
+		b: "Blitzkrieg",
+		c: "Entrenchment",
+		d: "Island Hopping"
+	  },
+	  correctAnswer: "b"
+	},
+	{
+	  question: "How was the United States often described to be before World War II?",
+	  answers: {
+		a: "Warmongering",
+		b: "in a state of isolationism",
+		c: "Non-neutral",
+		d: "Supporters of imperialism"
+	  },
+	  correctAnswer: "b"
+	},
+	{
+	  question: "True or false? With the end of World War II, the Nuremburg trials put prominent Nazis on trial for war crimes.",
+	  answers: {
+		a: "True",
+		b: "False"
+	  },
+	  correctAnswer: "a"
+	},
+	{
+	question: "What was the Lend-Lease act?",
+	  answers: {
+		a: "Agreement inside the U.S. government to stay out of World War II",
+		b: "A German act to precede the invasion of Soviet Russia",
+		c: "An act that would have America send supplies to Allied forces without being directly involved in the war",
+	  },
+	  correctAnswer: "c"
+	},
+	{
+	question: "After World War II, what 2 superpowers began to compete and begin the Cold War?",
+	  answers: {
+		a: "France and Russia",
+		b: "France and Britain",
+		c: "United States and Russia",
+	  },
+	  correctAnswer: "c"
+	},
+	{
+	question: "What was the organization made to prevent further conflicts such as World War II?",
+	  answers: {
+		a: "NATO",
+		b: "United Nations",
+		c: "USSR",
+	  },
+	  correctAnswer: "b"
+	},
+
+  ];
+
+  function buildQuiz() {
+	// we'll need a place to store the HTML output
+	const output = [];
+
+	// for each question...
+	myQuestions.forEach((currentQuestion, questionNumber) => {
+	
+		const image = [];
+		
+
+	
+	  // we'll want to store the list of answer choices
+	  const answers = [];
+
+	  // and for each available answer...
+	  for (letter in currentQuestion.answers) {
+		// ...add an HTML radio button
+		answers.push(
+		  `<label>
+			 <input type="radio" name="question${questionNumber}" value="${letter}">
+			  ${letter} :
+			  ${currentQuestion.answers[letter]}
+		   </label>`
+		);
+	  }
+
+	  // add this question and its answers to the output
+	  output.push(
+		`<div class="slide">
+		   <div class="question"> ${currentQuestion.question} </div>
+		   <div class="image"><img src=${currentQuestion.image}></div>
+		   <div class="answers"> ${answers.join("")} </div>
+		 </div>`
+	  );
+	});
+
+	// finally combine our output list into one string of HTML and put it on the page
+	quizContainer.innerHTML = output.join("");
+  }
+
+  function showResults() {
+	// gather answer containers from our quiz
+	const answerContainers = quizContainer.querySelectorAll(".answers");
+
+	// keep track of user's answers
+	var numCorrect = 0;
+
+	// for each question...
+	myQuestions.forEach((currentQuestion, questionNumber) => {
+	  // find selected answer
+	  const answerContainer = answerContainers[questionNumber];
+	  const selector = `input[name=question${questionNumber}]:checked`;
+	  const userAnswer = (answerContainer.querySelector(selector) || {}).value;
+
+	  // if answer is correct
+	  if (userAnswer === currentQuestion.correctAnswer) {
+		// add to the number of correct answers
+		numCorrect++;
+		// color the answers green
+		answerContainers[questionNumber].style.color = "green";
+	  } else {
+		// if answer is wrong or blank
+		// color the answers red
+		answerContainers[questionNumber].style.color = "red";
+	  }
+	});
+
+	// show number of correct answers out of total
+	resultsContainer.innerHTML = `${numCorrect} out of ${myQuestions.length}`;
+}
+
+function explanation(){
+if (window.confirm('Confirm for explanations. It will lead to a Google Document.')) 
+{
+window.location.href='https://www.google.com';
+};
+}
+
+  function showSlide(n) {
+	slides[currentSlide].classList.remove("active-slide");
+	slides[n].classList.add("active-slide");
+	currentSlide = n;
+	
+	if (currentSlide === 0) {
+	  previousButton.style.display = "none";
+	} else {
+	  previousButton.style.display = "inline-block";
+	}
+	
+	if (currentSlide === slides.length - 1) {
+	  nextButton.style.display = "none";
+	  submitButton.style.display = "inline-block";
+	} else {
+	  nextButton.style.display = "inline-block";
+	  submitButton.style.display = "none";
+	}
+	if (currentSlide === slides.length - 1) {
+	  resetButton.style.display = "inline-block";
+		explainButton.style.display = "inline-block";
+	} else {
+	  resetButton.style.display = "none";
+		explainButton.style.display = "none";
+	}
+
+  }
+  function showNextSlide() {
+	showSlide(currentSlide + 1);
+  }
+
+  function showPreviousSlide() {
+	showSlide(currentSlide - 1);
+  }
+
+  const quizContainer = document.getElementById("quiz");
+  const resultsContainer = document.getElementById("results");
+  const submitButton = document.getElementById("submit");
+  const resetButton = document.getElementById("reset");
+  // display quiz right away
+  buildQuiz();
+
+  const previousButton = document.getElementById("previous");
+  const nextButton = document.getElementById("next");
+  const explainButton = document.getElementById("explain");
+  const slides = document.querySelectorAll(".slide");
+  let currentSlide = 0;
+
+  showSlide(0);
+
+  // on submit, show results
+  submitButton.addEventListener("click", showResults);
+  nextButton.addEventListener("click", showNextSlide);
+  explainButton.addEventListener("click", explanation);
+  previousButton.addEventListener("click", showPreviousSlide);
+  resetButton.addEventListener("click", resetQuiz);
+  
+  function resetQuiz(){
+	quiz()
+	let n = 0;
+	slides[currentSlide].classList.remove("active-slide");
+	slides[n].classList.add("active-slide");
+	currentSlide = n;
+	resultsContainer.innerHTML = null
+  }
+  
+})();
+</script>
+<style>
+@import url(https://fonts.googleapis.com/css?family=Work+Sans:300,600);
+
+body{
+	font-size: 20px;
+	font-family: 'Work Sans', sans-serif;
+	color: #333;
+  font-weight: 300;
+  text-align: center;
+  background-color: #f8f6f0;
+}
+h1{
+  font-weight: 300;
+  margin: 0px;
+  padding: 10px;
+  font-size: 20px;
+  background-color: green;
+  color: #fff;
+}
+.question{
+  font-size: 30px;
+  margin-bottom: 10px;
+}
+.answers {
+  margin-bottom: 20px;
+  text-align: left;
+  display: inline-block;
+}
+.answers label{
+  display: block;
+  margin-bottom: 10px;
+}
+button{
+  font-family: 'Work Sans', sans-serif;
+	font-size: 22px;
+	background-color: #279;
+	color: #fff;
+	border: 1px;
+	border-radius: 3px;
+	padding: 30px;
+	cursor: pointer;
+	margin-bottom: 10px;
+}
+button:hover{
+	background-color: #38a;
+}
+
+#buttons{
+	margin-top:200px;
+}
+
+
+
+.slide{
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+.active-slide{
+  opacity: 1;
+  z-index: 2;
+}
+.quiz-container{
+  position: relative;
+  height: 200px;
+  margin-top: 40px;
+}
+img{
+width:20%;
+height:100%;
+}
+</style>
